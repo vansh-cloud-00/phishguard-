@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About – PhishGuard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .about-hero { background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(123,47,255,0.06)); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; position: relative; overflow: hidden; }
+    .about-hero::before { content: '🛡'; position: absolute; font-size: 15rem; opacity: 0.03; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events:none; }
+    .about-hero h2 { font-family: var(--font-display); font-size: clamp(1.5rem,4vw,2.5rem); color: var(--accent-cyan); margin-bottom: 1rem; }
+    .about-hero p { color: var(--text-secondary); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.8; }
+
+    .tech-list { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+    .tech-chip { padding: 0.3rem 0.9rem; border-radius: 20px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan); }
+
+    .goal-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1.2rem 0; border-bottom: 1px solid var(--border-subtle); }
+    .goal-item:last-child { border-bottom: none; }
+    .goal-num { font-family: var(--font-display); font-size: 1.3rem; color: var(--accent-cyan); opacity: 0.4; flex-shrink:0; width: 30px; }
+    .goal-content h4 { color: var(--text-primary); margin-bottom: 0.3rem; font-size: 1rem; }
+    .goal-content p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; }
+
+    .feature-tag { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.9rem; border-radius: 6px; font-size: 0.82rem; margin: 0.3rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle); color: var(--text-secondary); }
+    .feature-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="logo-icon">🛡</div><span>PHISHGUARD</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="learn.html">📚 Learn</a></li>
+    <li><a href="quiz.html">🎮 Quiz</a></li>
+    <li><a href="threat.html">🌐 Threat Intel</a></li>
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <!-- <li><a href="detector.html" class="nav-detector">🔍 URL Detector</a></li> -->
+    <li><a href="about.html">ℹ️ About</a></li>
+  </ul>
+  <!-- <div class="nav-status"><span class="status-dot"></span><span class="live-clock"></span></div> -->
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div class="page-badge">ℹ️ ABOUT THIS PROJECT</div>
+    <h1 class="page-title">PhishGuard</h1>
+    <p class="page-subtitle">A Phishing Awareness & Cyber Safety Learning System</p>
+  </div>
+
+  <div class="container" style="padding-bottom:4rem;">
+
+    <!-- HERO -->
+    <div class="about-hero fade-in">
+      <h2>Built to Keep You Cyber Safe</h2>
+      <p>
+        PhishGuard is an academic project designed to educate everyday internet users about phishing attacks through interactive learning, quizzes, and threat awareness tools. Our goal: make cybersecurity education accessible, engaging, and practical for everyone.
+      </p>
+    </div>
+
+    <div class="grid-2 fade-in">
+
+      <!-- PURPOSE -->
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h3 class="card-title">PROJECT PURPOSE</h3>
+        <p class="card-text">
+          Phishing is responsible for over 90% of data breaches globally, yet most people cannot identify a phishing attack. PhishGuard bridges this education gap through a practical, interactive platform that teaches users to recognize, understand, and respond to phishing attempts.
+        </p>
+        <p class="card-text" style="margin-top:0.75rem;">
+          This project was built as an academic front-end development exercise demonstrating real-world application of HTML, CSS, and JavaScript without any external frameworks.
+        </p>
+      </div>
+
+      <!-- TECH STACK -->
+      <div class="card">
+        <span class="card-icon">⚙️</span>
+        <h3 class="card-title">TECHNICAL OVERVIEW</h3>
+        <p class="card-text">Built entirely with vanilla web technologies — no frameworks, no dependencies.</p>
+        <div class="tech-list mt-2">
+          <span class="tech-chip">HTML5</span>
+          <span class="tech-chip">CSS3</span>
+          <span class="tech-chip">Vanilla JavaScript</span>
+          <span class="tech-chip">localStorage API</span>
+          <span class="tech-chip">Intersection Observer</span>
+          <span class="tech-chip">CSS Variables</span>
+          <span class="tech-chip">Glassmorphism</span>
+          <span class="tech-chip">CSS Animations</span>
+          <span class="tech-chip">Responsive Design</span>
+          <span class="tech-chip">Google Fonts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="card fade-in mt-3">
+      <h3 class="card-title" style="margin-bottom:1.5rem;">🚀 CYBERSECURITY AWARENESS GOALS</h3>
+      <div class="goal-item">
+        <div class="goal-num">01</div>
+        <div class="goal-content">
+          <h4>Educate Before Attack</h4>
+          <p>Most people learn about phishing after they've already been victimized. PhishGuard's goal is to educate users proactively, before they encounter a real attack, so they are mentally prepared to identify and avoid threats.</p>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">02</div>
+        <div class="goal-content">
+          <h4>Simulate Real Scenarios</h4>
+          <p>The quiz uses real-world phishing examples — actual URL patterns, SMS formats, and email tactics used by attackers — to give users practical experience recognizing threats in context.</p>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">03</div>
+        <div class="goal-content">
+          <h4>Build Lasting Habits</h4>
+          <p>Through repeated interaction with the quiz, threat analyzer, and learning modules, users build muscle memory for checking URLs, questioning urgency, and verifying requests — habits that protect them for life.</p>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-num">04</div>
+        <div class="goal-content">
+          <h4>Accessible for Everyone</h4>
+          <p>Cybersecurity education should not require technical knowledge. PhishGuard is designed in plain language with visual examples that anyone — students, seniors, professionals — can understand and apply immediately.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="card fade-in mt-3">
+      <h3 class="card-title" style="margin-bottom:1.2rem;">✅ PLATFORM FEATURES</h3>
+      <div>
+        <span class="feature-tag"><span class="dot"></span>Educational Home Page</span>
+        <span class="feature-tag"><span class="dot"></span>Interactive Learn Module</span>
+        <span class="feature-tag"><span class="dot"></span>8-Question Phishing Quiz</span>
+        <span class="feature-tag"><span class="dot"></span>URL Threat Analyzer</span>
+        <span class="feature-tag"><span class="dot"></span>Personal Dashboard</span>
+        <span class="feature-tag"><span class="dot"></span>Achievement Badges</span>
+        <span class="feature-tag"><span class="dot"></span>localStorage Progress Tracking</span>
+        <span class="feature-tag"><span class="dot"></span>Real vs Fake Comparison</span>
+        <span class="feature-tag"><span class="dot"></span>Awareness Score System</span>
+        <span class="feature-tag"><span class="dot"></span>Mobile Responsive Design</span>
+        <span class="feature-tag"><span class="dot"></span>Animated UI Components</span>
+        <span class="feature-tag"><span class="dot"></span>URL Detector Integration</span>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="card fade-in mt-3" style="border-color:rgba(255,140,0,0.2);background:rgba(255,140,0,0.04);">
+      <span class="card-icon">⚠️</span>
+      <h3 class="card-title" style="color:var(--accent-orange);">ACADEMIC DISCLAIMER</h3>
+      <p class="card-text">
+        PhishGuard is an academic front-end project created for educational purposes only. The threat intelligence scanner simulates URL risk analysis patterns and is not connected to a live threat database. For real threat detection, please use established tools like Google Safe Browsing, VirusTotal, or your organization's cybersecurity team.
+      </p>
+      <p class="card-text" style="margin-top:0.75rem;">
+        All phishing examples shown are fictional recreations for educational purposes and do not represent any real attack targeting real organizations.
+      </p>
+    </div>
+
+    <div class="flex-center gap-2 flex-wrap mt-4 fade-in">
+      <a href="index.html" class="btn btn-primary">🏠 Back to Home</a>
+      <a href="learn.html" class="btn btn-outline">📚 Start Learning</a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-logo">🛡 PHISHGUARD</div>
+  <p class="footer-text">// CYBER SAFETY AWARENESS PLATFORM &nbsp;|&nbsp; ACADEMIC PROJECT &nbsp;|&nbsp; EDUCATIONAL USE ONLY</p>
+</footer>
+<script src="js/firebase-config.js"></script>
+
+<script src="js/main.js"></script>
+</body>
+</html>

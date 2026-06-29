@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn Phishing – PhishGuard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--border-subtle);
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--glass-bg);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .type-card {
+      border-left: 3px solid var(--accent-cyan);
+      margin-bottom: 1.5rem;
+    }
+
+    .type-card.red { border-color: var(--accent-red); }
+    .type-card.orange { border-color: var(--accent-orange); }
+    .type-card.purple { border-color: var(--accent-purple); }
+    .type-card.green { border-color: var(--accent-green); }
+
+    /* comparison */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    .real-card {
+      border-color: rgba(0,255,136,0.3);
+      background: rgba(0,255,136,0.04);
+    }
+    .fake-card {
+      border-color: rgba(255,51,102,0.3);
+      background: rgba(255,51,102,0.04);
+    }
+
+    .compare-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .real-card .compare-header { color: var(--accent-green); }
+    .fake-card .compare-header { color: var(--accent-red); }
+
+    .compare-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .compare-list li {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .real-card .compare-list li::before { content: '✓'; color: var(--accent-green); font-weight:bold; }
+    .fake-card .compare-list li::before { content: '✗'; color: var(--accent-red); font-weight:bold; }
+
+    .url-example {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+    .url-real { background: rgba(0,255,136,0.08); color: var(--accent-green); border: 1px solid rgba(0,255,136,0.2); }
+    .url-fake { background: rgba(255,51,102,0.08); color: var(--accent-red); border: 1px solid rgba(255,51,102,0.2); }
+
+    .step-list { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .step-list li {
+      counter-increment: step;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .step-list li::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 6px;
+      min-width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tip-box {
+      background: rgba(0,255,136,0.06);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .tip-icon { font-size: 1.3rem; flex-shrink:0; }
+    .tip-text { font-size:0.9rem; color:var(--text-secondary); line-height:1.7; }
+    .tip-text strong { color: var(--accent-green); }
+
+    @media(max-width:700px) { .compare-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="logo-icon">🛡</div><span>PHISHGUARD</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="learn.html">📚 Learn</a></li>
+    <li><a href="quiz.html">🎮 Quiz</a></li>
+    <li><a href="threat.html">🌐 Threat Intel</a></li>
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <!-- <li><a href="detector.html" class="nav-detector">🔍 URL Detector</a></li> -->
+    <li><a href="about.html">ℹ️ About</a></li>
+  </ul>
+  <!-- <div class="nav-status"><span class="status-dot"></span><span class="live-clock"></span></div> -->
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div class="page-badge">📚 TRAINING MODULE</div>
+    <h1 class="page-title">Learn Phishing</h1>
+    <p class="page-subtitle">Master how phishing works, its types, and how to spot attacks before they catch you.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- TAB BAR -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="basics">🧠 Basics</button>
+      <button class="tab-btn" data-tab="types">🎯 Attack Types</button>
+      <button class="tab-btn" data-tab="compare">🔍 Real vs Fake</button>
+      <button class="tab-btn" data-tab="protect">🛡 How to Stay Safe</button>
+    </div>
+
+    <!-- TAB: BASICS -->
+    <div class="tab-panel active" id="tab-basics">
+      <div class="grid-2 fade-in">
+        <div>
+          <div class="card type-card" style="margin-bottom:1.5rem;">
+            <span class="card-icon">🎣</span>
+            <h3 class="card-title">THE SIMPLE TRUTH</h3>
+            <p class="card-text">
+              Phishing is <strong style="color:var(--text-primary)">manipulation disguised as trust.</strong> Attackers study human psychology — our fear, urgency, curiosity, and greed — to make us act without thinking.
+            </p>
+            <p class="card-text" style="margin-top:0.75rem;">
+              The word "phishing" comes from "fishing" — casting fake bait and waiting for a victim to bite. And just like fishing, the bait is designed to look completely real.
+            </p>
+          </div>
+          <div class="card type-card green">
+            <span class="card-icon">🧠</span>
+            <h3 class="card-title" style="color:var(--accent-green)">THE PSYCHOLOGY</h3>
+            <p class="card-text">Attackers use these triggers to bypass your logical thinking:</p>
+            <ul class="compare-list" style="margin-top:0.75rem;">
+              <li>Fear – "Your account will be closed!"</li>
+              <li>Urgency – "Act within 24 hours!"</li>
+              <li>Authority – "This is your bank speaking"</li>
+              <li>Curiosity – "You've won a prize!"</li>
+              <li>Greed – "Click here to claim ₹10,000"</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="card fade-in" style="height:100%;">
+            <h3 class="card-title">📊 PHISHING BY THE NUMBERS</h3>
+            <div style="display:flex;flex-direction:column;gap:1.2rem;margin-top:1rem;">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.4rem;">
+                  <span>Email remains #1 attack vector</span><span class="text-red">83%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:83%;background:linear-gradient(90deg,var(--accent-red),#ff6b6b);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.4rem;">
+                  <span>SMS / Smishing attacks</span><span class="text-orange">61%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:61%;background:linear-gradient(90deg,var(--accent-orange),#ffcc00);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.4rem;">
+                  <span>Social media phishing</span><span class="text-cyan">47%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:47%;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.4rem;">
+                  <span>Voice phishing (Vishing)</span><span style="color:var(--accent-purple)">38%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:38%;background:linear-gradient(90deg,var(--accent-purple),#b04aff);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.4rem;">
+                  <span>Spear phishing (targeted)</span><span class="text-green">29%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:29%;background:linear-gradient(90deg,var(--accent-green),#00ccaa);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: TYPES -->
+    <div class="tab-panel" id="tab-types">
+      <div class="grid-2 fade-in">
+        <div class="card type-card">
+          <span class="card-icon">📧</span>
+          <h3 class="card-title">EMAIL PHISHING</h3>
+          <p class="card-text">The oldest and most common type. Attackers send millions of fake emails that mimic banks, tech companies, or government agencies. These emails contain urgent messages and malicious links.</p>
+          <div class="tip-box" style="margin-top:1rem;">
+            <span class="tip-icon">⚠</span>
+            <span class="tip-text"><strong>Watch for:</strong> Suspicious sender domain, spelling errors, urgent tone, links that don't match the company's real URL.</span>
+          </div>
+        </div>
+
+        <div class="card type-card red">
+          <span class="card-icon">🌐</span>
+          <h3 class="card-title">FAKE WEBSITES (Clone Sites)</h3>
+          <p class="card-text">Attackers create pixel-perfect copies of real websites. The URL looks slightly different (e.g., "paypa1.com" instead of "paypal.com"). Your login credentials are stolen instantly.</p>
+          <div class="tip-box" style="margin-top:1rem;">
+            <span class="tip-icon">⚠</span>
+            <span class="tip-text"><strong>Watch for:</strong> Check the full URL before entering any password. Look for HTTPS. Even HTTPS can be fake — always verify the domain name.</span>
+          </div>
+        </div>
+
+        <div class="card type-card orange">
+          <span class="card-icon">📱</span>
+          <h3 class="card-title">SMISHING (SMS Phishing)</h3>
+          <p class="card-text">Fake SMS messages pretend to be from your bank or delivery service. "Your parcel is held. Pay ₹50 to release it: [link]" — The link leads to a fake payment page.</p>
+          <div class="tip-box" style="margin-top:1rem;">
+            <span class="tip-icon">⚠</span>
+            <span class="tip-text"><strong>Watch for:</strong> Unexpected SMS from unknown numbers, requests to click a link or share an OTP, urgency about account or delivery issues.</span>
+          </div>
+        </div>
+
+        <div class="card type-card purple">
+          <span class="card-icon">📞</span>
+          <h3 class="card-title">VISHING (Voice Phishing)</h3>
+          <p class="card-text">Fake phone calls from "bank agents" or "CBI officers" who pressure you into sharing OTPs, account details, or making emergency transfers. Often uses spoofed numbers.</p>
+          <div class="tip-box" style="margin-top:1rem;">
+            <span class="tip-icon">⚠</span>
+            <span class="tip-text"><strong>Watch for:</strong> No real bank/government ever asks for your OTP over phone. Hang up and call the official number directly.</span>
+          </div>
+        </div>
+
+        <div class="card type-card">
+          <span class="card-icon">🎯</span>
+          <h3 class="card-title">SPEAR PHISHING</h3>
+          <p class="card-text">Highly targeted attacks using your personal information. The attacker researches you on LinkedIn or social media and crafts a personalized email that feels very legitimate.</p>
+          <div class="tip-box" style="margin-top:1rem;">
+            <span class="tip-icon">⚠</span>
+            <span class="tip-text"><strong>Watch for:</strong> Emails that use your real name, reference your company, or mention a colleague. Even highly personalized emails can be fake.</span>
+          </div>
+        </div>
+
+        <div class="card type-card green">
+          <span class="card-icon">🐋</span>
+          <h3 class="card-title">WHALING (CEO FRAUD)</h3>
+          <p class="card-text">Spear phishing that specifically targets executives (CEOs, CFOs). Attackers impersonate the CEO to instruct finance teams to transfer money "urgently."</p>
+          <div class="tip-box" style="margin-top:1rem;">
+            <span class="tip-icon">⚠</span>
+            <span class="tip-text"><strong>Watch for:</strong> Unusual payment requests via email, no phone confirmation. Always verify large transactions via a second channel (call the person directly).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: REAL VS FAKE -->
+    <div class="tab-panel" id="tab-compare">
+      <div class="section-header fade-in" style="margin-bottom:2rem;">
+        <h3 class="section-title">Real <span>vs</span> Fake — Learn to Spot the Difference</h3>
+      </div>
+
+      <!-- URL COMPARISON -->
+      <h4 style="font-family:var(--font-display);color:var(--text-secondary);font-size:0.85rem;letter-spacing:2px;margin-bottom:1rem;">// URL COMPARISON</h4>
+      <div class="compare-grid mb-3 fade-in">
+        <div class="card real-card">
+          <div class="compare-header">✅ LEGITIMATE URLS</div>
+          <ul class="compare-list">
+            <li>Uses the exact official domain</li>
+            <li>Has valid HTTPS certificate</li>
+            <li>No extra words or hyphens</li>
+            <li>No numbers replacing letters</li>
+          </ul>
+          <div class="url-real">✓ https://www.sbi.co.in/login</div>
+          <div class="url-real" style="margin-top:0.5rem;">✓ https://accounts.google.com</div>
+          <div class="url-real" style="margin-top:0.5rem;">✓ https://www.amazon.in</div>
+        </div>
+        <div class="card fake-card">
+          <div class="compare-header">🚨 PHISHING URLS</div>
+          <ul class="compare-list">
+            <li>Misspelled or extra words in domain</li>
+            <li>Numbers replacing letters (e.g., "0" for "o")</li>
+            <li>Strange TLDs (.tk, .info, .xyz)</li>
+            <li>Subdomains mimicking real sites</li>
+          </ul>
+          <div class="url-fake">✗ https://sbi-verify-account.tk/login</div>
+          <div class="url-fake" style="margin-top:0.5rem;">✗ https://g00gle.account-secure.com</div>
+          <div class="url-fake" style="margin-top:0.5rem;">✗ https://amazon-india-offer.xyz</div>
+        </div>
+      </div>
+
+      <!-- EMAIL COMPARISON -->
+      <h4 style="font-family:var(--font-display);color:var(--text-secondary);font-size:0.85rem;letter-spacing:2px;margin-bottom:1rem;">// EMAIL COMPARISON</h4>
+      <div class="compare-grid fade-in">
+        <div class="card real-card">
+          <div class="compare-header">✅ REAL EMAIL TRAITS</div>
+          <ul class="compare-list">
+            <li>Comes from official domain (@sbi.co.in)</li>
+            <li>Greets you by your full name</li>
+            <li>No urgent threats or pressure</li>
+            <li>Links go to official domain</li>
+            <li>Professionally written, no typos</li>
+          </ul>
+        </div>
+        <div class="card fake-card">
+          <div class="compare-header">🚨 PHISHING EMAIL TRAITS</div>
+          <ul class="compare-list">
+            <li>From generic or spoofed address</li>
+            <li>Generic greeting ("Dear Customer")</li>
+            <li>Creates panic and urgency</li>
+            <li>Links to suspicious third-party sites</li>
+            <li>Spelling mistakes, bad grammar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PROTECTION -->
+    <div class="tab-panel" id="tab-protect">
+      <div class="grid-2 fade-in">
+        <div class="card">
+          <h3 class="card-title">🛡 YOUR DEFENSE CHECKLIST</h3>
+          <ol class="step-list" style="margin-top:1rem;">
+            <li>Always check the URL before entering your password</li>
+            <li>Never share OTPs with anyone — not even your bank</li>
+            <li>Enable 2-Factor Authentication on all accounts</li>
+            <li>Don't click links in emails — type the URL manually</li>
+            <li>Verify unexpected requests via phone call</li>
+            <li>Use a password manager to detect fake sites</li>
+            <li>Keep your browser and OS updated</li>
+            <li>Report phishing emails to your email provider</li>
+          </ol>
+        </div>
+        <div>
+          <div class="card mb-2">
+            <h3 class="card-title">🔑 THE GOLDEN RULE</h3>
+            <p class="card-text" style="font-size:1rem;line-height:1.8;">
+              If something creates <strong style="color:var(--accent-red)">urgency, fear, or seems too good to be true</strong> — STOP. Take a breath. Verify through official channels before doing anything.
+            </p>
+            <div class="tip-box" style="margin-top:1rem;">
+              <span class="tip-icon">💡</span>
+              <span class="tip-text"><strong>Think before you click.</strong> Attackers rely on your gut reaction. Your pause is your protection.</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="card-title">✅ SAFE vs SUSPICIOUS</h3>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.75rem;">
+              <div class="tip-box" style="padding:0.8rem 1rem;margin:0;">
+                <span>🟢</span><span class="tip-text" style="font-size:0.85rem;"><strong>Safe:</strong> Official email, your name used, link goes to real domain</span>
+              </div>
+              <div style="background:rgba(255,140,0,0.06);border:1px solid rgba(255,140,0,0.2);border-radius:10px;padding:0.8rem 1rem;display:flex;gap:0.75rem;">
+                <span>🟡</span><span class="tip-text" style="font-size:0.85rem;"><strong>Suspicious:</strong> Unexpected message, unknown sender, urgency used</span>
+              </div>
+              <div style="background:rgba(255,51,102,0.06);border:1px solid rgba(255,51,102,0.2);border-radius:10px;padding:0.8rem 1rem;display:flex;gap:0.75rem;">
+                <span>🔴</span><span class="tip-text" style="font-size:0.85rem;"><strong>Danger:</strong> Asks for OTP/password, weird URL, generic greeting, threats</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-center mt-4 gap-2 flex-wrap fade-in">
+        <a href="quiz.html" class="btn btn-primary">🎮 Test Your Knowledge</a>
+        <a href="threat.html" class="btn btn-outline">🌐 Check Threat Intel</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <!-- <div class="footer-logo">🛡 PHISHGUARD</div> -->
+  <p class="footer-text">// CYBER SAFETY AWARENESS PLATFORM &nbsp;|&nbsp; ACADEMIC PROJECT</p>
+</footer>
+<script src="js/firebase-config.js"></script>
+
+<script src="js/main.js"></script>
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Track learn page visit
+  if (window.PhishGuard) {
+    PhishGuard.Store.inc('learn_visits');
+  }
+</script>
+</body>
+</html>

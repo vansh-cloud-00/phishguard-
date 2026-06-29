@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhishGuard – Phishing Awareness & Cyber Safety</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(123,47,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1.2rem;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 30px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-cyan);
+      letter-spacing: 2px;
+      margin-bottom: 2rem;
+      animation: fadeDown 0.6s ease forwards;
+    }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-15px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);} }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: 1.0;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero-title .brand { color: var(--accent-cyan); text-shadow: 0 0 40px rgba(0,212,255,0.5); }
+    .hero-title .brand-guard { color: #fff; }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 1.2rem auto 2.5rem;
+      line-height: 1.7;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-tagline strong { color: var(--accent-cyan); }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3.5rem;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 20px rgba(0,212,255,0.4);
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      letter-spacing: 1px;
+    }
+
+    /* ---- WHAT IS PHISHING ---- */
+    .phishing-def {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phishing-def::before {
+      content: '⚠';
+      position: absolute;
+      right: 2rem; top: 1.5rem;
+      font-size: 5rem;
+      opacity: 0.04;
+    }
+
+    .phishing-def h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--accent-cyan);
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .phishing-def p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .phishing-def p:last-child { margin-bottom: 0; }
+    .phishing-def strong { color: var(--text-primary); }
+
+    /* ---- DANGER CARDS ---- */
+    .danger-card {
+      border-color: rgba(255,51,102,0.2);
+    }
+    .danger-card::before {
+      background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+    }
+    .danger-card .card-title { color: var(--accent-red); }
+
+    /* ---- EXAMPLE CARDS ---- */
+    .example-card {
+      border-color: rgba(255,140,0,0.2);
+    }
+
+    .example-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      background: rgba(255,51,102,0.1);
+      color: var(--accent-red);
+      border: 1px solid rgba(255,51,102,0.2);
+      margin-bottom: 0.8rem;
+    }
+
+    .example-msg {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: 0.8rem;
+      line-height: 1.7;
+    }
+
+    .example-msg .fake-link {
+      color: var(--accent-orange);
+      text-decoration: underline;
+      cursor: default;
+    }
+
+    /* ---- SCROLL INDICATOR ---- */
+    .scroll-down {
+      position: absolute;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(8px);} }
+
+    .scroll-arrow {
+      width: 20px; height: 20px;
+      border-right: 2px solid var(--accent-cyan);
+      border-bottom: 2px solid var(--accent-cyan);
+      transform: rotate(45deg);
+      opacity: 0.5;
+    }
+
+    /* ---- THREAT TICKER ---- */
+    .threat-ticker {
+      background: rgba(255,51,102,0.06);
+      border: 1px solid rgba(255,51,102,0.2);
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+
+    .ticker-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-red);
+      white-space: nowrap;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .ticker-text {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      animation: ticker 18s linear infinite;
+    }
+
+    @keyframes ticker { from{transform:translateX(100%);} to{transform:translateX(-100%);} }
+  </style>
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">🛡</div>
+    <span>PHISHGUARD</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="learn.html">📚 Learn</a></li>
+    <li><a href="quiz.html">🎮 Quiz</a></li>
+    <li><a href="threat.html">🌐 Threat Intel</a></li>
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <!-- <li><a href="detector.html" class="nav-detector">🔍 URL Detector</a></li> -->
+    <li><a href="about.html">ℹ️ About</a></li>
+  </ul>
+  <!-- <div class="nav-status">
+    <span class="status-dot"></span>
+    <span class="live-clock"></span>
+  </div> -->
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<main>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <div class="hero-badge">
+      <span class="status-dot"></span>
+      CYBER SAFETY AWARENESS PLATFORM
+    </div>
+
+    <h1 class="hero-title">
+      <span class="brand">PHISH</span><span class="brand-guard">GUARD</span>
+    </h1>
+
+    <p class="hero-tagline">
+      <strong>An interactive learning platform</strong> for understanding <br>
+     phishing attacks and improving awareness of safe online practices
+    </p>
+
+    <div class="hero-ctas">
+      <a href="learn.html" class="btn btn-primary">📚 Learn Phishing</a>
+      <a href="quiz.html" class="btn btn-outline">🎮 Take Quiz</a>
+      <a href="threat.html" class="btn btn-danger">🌐 Check Threat Intel</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat1">3.4B</div>
+        <div class="hero-stat-label">PHISHING EMAILS/DAY</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat2">36%</div>
+        <div class="hero-stat-label">BREACHES START HERE</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="stat3">$17.7K</div>
+        <div class="hero-stat-label">LOST PER MINUTE</div>
+      </div>
+    </div>
+
+    <div class="scroll-down">
+      <span>SCROLL</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ===================== THREAT TICKER ===================== -->
+  <!-- <div class="container">
+    <div class="threat-ticker">
+      <span class="ticker-label">⚡ LIVE THREATS</span>
+      <span class="ticker-text">
+        Phishing attack detected targeting bank customers · Fake OTP SMS campaign active · Credential harvesting via fake login pages · Social engineering attacks rising 40% · New phishing kit mimics Google login · SMS phishing (smishing) surge reported · Beware fake IT support calls · Spear phishing targeting executives · Fake Amazon delivery notifications spreading
+      </span> -->
+    </div>
+  </div>
+
+  <!-- ===================== WHAT IS PHISHING ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">// CORE CONCEPT</div>
+        <h2 class="section-title">What is <span>Phishing</span>?</h2>
+        <p class="section-desc">Before you can defend yourself, you need to understand the enemy.</p>
+      </div>
+
+      <div class="phishing-def fade-in">
+        <h3>🎣 Simple Definition</h3>
+        <p>
+          <strong>Phishing is a cyber attack where criminals pretend to be someone you trust</strong> — your bank, your boss, Google, Amazon — to trick you into handing over sensitive information like passwords, OTPs, credit card numbers, or personal details.
+        </p>
+        <p>
+          Think of it like a fisherman casting a hook with fake bait. The "bait" is a fake email, fake website, or fake phone call that looks 100% real. When you click or respond, you've been caught.
+        </p>
+        <p>
+          The scary part? <strong>You won't even know it happened</strong> until your bank account is empty or your social media is hijacked.
+        </p>
+        <div class="flex gap-2 flex-wrap mt-3">
+          <span class="badge badge-red">🎣 Deception-Based Attack</span>
+          <span class="badge badge-orange">🔑 Steals Credentials</span>
+          <span class="badge badge-cyan">💻 Targets Everyone</span>
+          <span class="badge badge-green">🧠 Social Engineering</span>
+        </div>
+      </div>
+
+      <!-- Types grid -->
+      <div class="grid-3 fade-in">
+        <div class="card">
+          <span class="card-icon">📧</span>
+          <h3 class="card-title">EMAIL PHISHING</h3>
+          <p class="card-text">Fake emails that look like they're from your bank, Netflix, or Amazon. They create urgency: "Your account will be suspended!" and link to fake websites.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📱</span>
+          <h3 class="card-title">SMISHING (SMS)</h3>
+          <p class="card-text">Fake text messages asking you to verify your OTP or click a link. Common in fake parcel delivery scams and fake bank alerts.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🌐</span>
+          <h3 class="card-title">FAKE WEBSITES</h3>
+          <p class="card-text">Websites that look identical to real ones (Google, SBI, HDFC) but steal your username and password the moment you type them in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHY DANGEROUS ===================== -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">// IMPACT ANALYSIS</div>
+        <h2 class="section-title">Why Phishing is <span>Dangerous</span></h2>
+        <p class="section-desc">One wrong click can ruin everything. Here's what's at stake.</p>
+      </div>
+
+      <div class="grid-2 fade-in">
+        <div class="card danger-card">
+          <span class="card-icon">🕵️</span>
+          <h3 class="card-title">IDENTITY THEFT</h3>
+          <p class="card-text">Attackers steal your name, Aadhaar, PAN, and personal info to open fake credit cards, take loans, or commit crimes under your identity. Recovering from identity theft takes years.</p>
+        </div>
+        <div class="card danger-card">
+          <span class="card-icon">💸</span>
+          <h3 class="card-title">FINANCIAL FRAUD</h3>
+          <p class="card-text">Once they have your banking credentials or OTP, they drain your accounts in minutes. Many victims lose their entire life savings before they realize what happened.</p>
+        </div>
+        <div class="card danger-card">
+          <span class="card-icon">🔒</span>
+          <h3 class="card-title">FAKE LOGIN PAGES</h3>
+          <p class="card-text">Pixel-perfect copies of real websites capture your password. Your browser won't warn you because it looks exactly real. Even tech-savvy people fall for these.</p>
+        </div>
+        <div class="card danger-card">
+          <span class="card-icon">📤</span>
+          <h3 class="card-title">DATA LEAKAGE</h3>
+          <p class="card-text">Your private photos, emails, and company secrets get stolen and sold on the dark web. One employee clicking a phishing link can expose an entire company.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== REAL-WORLD EXAMPLES ===================== -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-label">// REAL WORLD EXAMPLES</div>
+        <h2 class="section-title">How Phishing <span>Looks in Real Life</span></h2>
+        <p class="section-desc">These are examples of actual phishing tactics. Learn to spot them.</p>
+      </div>
+
+      <div class="grid-3 fade-in">
+        <div class="card example-card">
+          <div class="example-badge">🚨 FAKE BANK EMAIL</div>
+          <h3 class="card-title">SBI ALERT SCAM</h3>
+          <div class="example-msg">
+            From: <span style="color:var(--accent-red)">noreply@sbi-alerts-verify.com</span><br><br>
+            Dear Customer,<br>
+            Your SBI account has been <strong style="color:var(--accent-red)">SUSPENDED</strong>. Click below to verify immediately:<br><br>
+            <span class="fake-link">→ http://sbi-verify-now.tk/login</span>
+          </div>
+          <p class="card-text mt-2" style="font-size:0.82rem;">
+            <span class="text-red">⚠ Red flags:</span> Unofficial domain, urgency language, suspicious link
+          </p>
+        </div>
+
+        <div class="card example-card">
+          <div class="example-badge">🚨 FAKE OTP SMS</div>
+          <h3 class="card-title">OTP SMISHING</h3>
+          <div class="example-msg">
+            HDFC-BANK: Your account shows suspicious activity. Verify your OTP immediately:<br><br>
+            Your OTP is: <strong style="color:var(--accent-cyan)">847291</strong><br><br>
+            Share with our agent: <span class="fake-link">+91-99XXX-XXXXX</span>
+          </div>
+          <p class="card-text mt-2" style="font-size:0.82rem;">
+            <span class="text-red">⚠ Red flags:</span> Real banks NEVER ask you to share OTPs
+          </p>
+        </div>
+
+        <div class="card example-card">
+          <div class="example-badge">🚨 FAKE LOGIN SITE</div>
+          <h3 class="card-title">GOOGLE CLONE</h3>
+          <div class="example-msg">
+            URL: <span class="fake-link">https://google-accounts-verify.info</span><br><br>
+            [Looks exactly like Google login]<br><br>
+            ● Username: ____________<br>
+            ● Password: ____________<br>
+            [Login Button]
+          </div>
+          <p class="card-text mt-2" style="font-size:0.82rem;">
+            <span class="text-red">⚠ Red flags:</span> Domain isn't google.com, check the URL carefully
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA SECTION ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="card fade-in scanline" style="text-align:center;padding:3.5rem 2rem;background:linear-gradient(135deg,rgba(0,212,255,0.07),rgba(123,47,255,0.07));">
+        <div class="section-label">// START YOUR TRAINING</div>
+        <h2 class="section-title" style="margin-bottom:0.75rem;">Ready to <span>Protect Yourself</span>?</h2>
+        <p class="section-desc mb-3">Start your cybersecurity training journey today. It only takes 10 minutes.</p>
+        <div class="flex-center gap-2 flex-wrap mt-3">
+          <a href="learn.html" class="btn btn-primary">📚 Start Learning</a>
+          <a href="quiz.html" class="btn btn-outline">🎮 Test Your Knowledge</a>
+          <a href="threat.html" class="btn btn-danger">🌐 Check Threats</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <!-- <div class="footer-logo">🛡 PHISHGUARD</div> -->
+  <p class="footer-text">// CYBER SAFETY AWARENESS PLATFORM &nbsp;|&nbsp; ACADEMIC PROJECT &nbsp;|&nbsp; STAY SAFE ONLINE</p>
+</footer>
+<script src="js/firebase-config.js"></script>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz – PhishGuard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .quiz-wrapper { max-width: 750px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* START SCREEN */
+    .start-screen { text-align: center; }
+    .start-screen .big-icon { font-size: 5rem; margin-bottom: 1.5rem; display: block; }
+    .quiz-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 2rem 0; }
+    .quiz-info-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 1.2rem; text-align: center; }
+    .quiz-info-item .num { font-family: var(--font-display); font-size: 1.8rem; color: var(--accent-cyan); }
+    .quiz-info-item .lbl { font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: 1px; }
+
+    /* QUESTION SCREEN */
+    .question-screen { display: none; }
+    .q-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .q-counter { font-family: var(--font-display); font-size: 0.8rem; color: var(--text-muted); letter-spacing: 1px; }
+    .q-number { font-family: var(--font-display); font-size: 1.8rem; color: var(--accent-cyan); }
+    .q-type-badge { font-family: var(--font-mono); font-size: 0.7rem; padding: 0.2rem 0.7rem; border-radius: 20px; background: rgba(0,212,255,0.08); color: var(--accent-cyan); border: 1px solid rgba(0,212,255,0.2); }
+
+    .q-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 2rem; backdrop-filter: blur(10px); }
+    .q-text { font-size: 1.15rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.6; }
+
+    .q-scenario {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--accent-orange);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      white-space: pre-wrap;
+      line-height: 1.7;
+    }
+
+    .q-options { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+
+    .option-btn {
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition);
+    }
+    .option-btn:hover:not(:disabled) { border-color: var(--border-glow); background: var(--glass-bg); color: var(--accent-cyan); }
+    .option-btn.correct { border-color: var(--accent-green); background: rgba(0,255,136,0.08); color: var(--accent-green); }
+    .option-btn.wrong { border-color: var(--accent-red); background: rgba(255,51,102,0.08); color: var(--accent-red); }
+    .option-btn:disabled { cursor: default; }
+
+    .feedback-box { border-radius: 10px; padding: 1.2rem; font-size: 0.9rem; line-height: 1.7; display: none; margin-bottom: 1rem; }
+    .feedback-correct { background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); color: var(--text-secondary); }
+    .feedback-correct strong { color: var(--accent-green); }
+    .feedback-wrong { background: rgba(255,51,102,0.08); border: 1px solid rgba(255,51,102,0.2); color: var(--text-secondary); }
+    .feedback-wrong strong { color: var(--accent-red); }
+
+    /* RESULT SCREEN */
+    .result-screen { display: none; text-align: center; }
+    .result-circle-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+    .result-circle-wrap svg { transform: rotate(-90deg); }
+    .score-text { position: absolute; text-align: center; }
+    .score-num { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--accent-cyan); }
+    .score-lbl { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); letter-spacing: 1px; }
+
+    .result-grade { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; letter-spacing: 2px; }
+    .grade-gold { color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+    .grade-cyan { color: var(--accent-cyan); text-shadow: 0 0 20px rgba(0,212,255,0.5); }
+    .grade-orange { color: var(--accent-orange); }
+    .grade-red { color: var(--accent-red); }
+
+    .result-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin: 2rem 0; }
+    .r-stat { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 1rem; }
+    .r-stat .v { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent-cyan); }
+    .r-stat .l { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); letter-spacing: 1px; }
+
+    @media(max-width:600px) {
+      .quiz-info-grid { grid-template-columns: 1fr 1fr; }
+      .result-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="logo-icon">🛡</div><span>PHISHGUARD</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="learn.html">📚 Learn</a></li>
+    <li><a href="quiz.html">🎮 Quiz</a></li>
+    <li><a href="threat.html">🌐 Threat Intel</a></li>
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <!-- <li><a href="detector.html" class="nav-detector">🔍 URL Detector</a></li> -->
+    <li><a href="about.html">ℹ️ About</a></li>
+  </ul>
+  <!-- <div class="nav-status"><span class="status-dot"></span><span class="live-clock"></span></div> -->
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div class="page-badge">🎮 INTERACTIVE TRAINING</div>
+    <h1 class="page-title">Phishing Awareness Quiz</h1>
+    <p class="page-subtitle">Test your ability to spot phishing attacks with real-world scenarios.</p>
+  </div>
+
+  <div class="quiz-wrapper">
+
+    <!-- START SCREEN -->
+    <div class="start-screen card fade-in" id="quiz-start">
+      <span class="big-icon">🎯</span>
+      <h2 class="section-title">Can You Spot a Phishing Attack?</h2>
+      <p class="section-desc mt-2">
+        You'll be shown 8 real-world scenarios — URLs, emails, and SMS messages. Choose whether it's safe or phishing, and learn from detailed explanations.
+      </p>
+
+      <div class="quiz-info-grid">
+        <div class="quiz-info-item">
+          <div class="num">8</div>
+          <div class="lbl">QUESTIONS</div>
+        </div>
+        <div class="quiz-info-item">
+          <div class="num">∞</div>
+          <div class="lbl">TIME LIMIT</div>
+        </div>
+        <div class="quiz-info-item">
+          <div class="num">100</div>
+          <div class="lbl">MAX SCORE</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="startQuiz()" style="font-size:1rem;padding:1rem 2.5rem;">🚀 Start Quiz</button>
+    </div>
+
+    <!-- QUESTION SCREEN -->
+    <div class="question-screen" id="quiz-question">
+      <div class="q-header">
+        <div>
+          <span class="q-number" id="q-number">Q1</span>
+          <span class="q-type-badge" id="q-type">URL</span>
+        </div>
+        <span class="q-counter" id="q-progress-text">Question 1 of 8</span>
+      </div>
+
+      <div class="progress-bar mb-3">
+        <div class="progress-fill" id="q-progress-fill" style="width:0%;"></div>
+      </div>
+
+      <div class="q-card">
+        <p class="q-text" id="q-text"></p>
+        <div class="q-scenario" id="q-scenario"></div>
+        <div class="q-options" id="q-options"></div>
+        <div class="feedback-box" id="q-feedback"></div>
+        <button class="btn btn-primary" id="q-next" onclick="nextQuestion()" style="display:none;">Next Question →</button>
+      </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div class="result-screen card" id="quiz-result">
+      <div class="result-circle-wrap">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="54" fill="none" stroke="rgba(0,212,255,0.1)" stroke-width="8"/>
+          <circle id="r-circle" cx="65" cy="65" r="54" fill="none"
+            stroke="url(#scoreGrad)" stroke-width="8" stroke-linecap="round"
+            style="stroke-dasharray: 339.3; stroke-dashoffset: 339.3; transition: stroke-dashoffset 1s ease 0.3s;"/>
+          <defs>
+            <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#00d4ff"/>
+              <stop offset="100%" style="stop-color:#7b2fff"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="score-text">
+          <div class="score-num"><span id="r-score">0</span>/<span id="r-total">8</span></div>
+          <div class="score-lbl" id="r-pct">0%</div>
+        </div>
+      </div>
+
+      <div class="result-grade" id="r-grade">CALCULATING...</div>
+      <p style="color:var(--text-secondary);max-width:500px;margin:0 auto 1.5rem;" id="r-msg"></p>
+
+      <div class="result-stats">
+        <div class="r-stat">
+          <div class="v text-green" id="r-score-disp">0</div>
+          <div class="l">CORRECT</div>
+        </div>
+        <div class="r-stat">
+          <div class="v text-red" id="r-wrong-disp">0</div>
+          <div class="l">INCORRECT</div>
+        </div>
+        <div class="r-stat">
+          <div class="v" id="r-pct-disp">0%</div>
+          <div class="l">ACCURACY</div>
+        </div>
+      </div>
+
+      <div class="flex-center gap-2 flex-wrap mt-3">
+        <button class="btn btn-primary" onclick="retryQuiz()">🔄 Try Again</button>
+        <a href="learn.html" class="btn btn-outline">📚 Review Lessons</a>
+        <a href="dashboard.html" class="btn btn-outline">📊 View Dashboard</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <!-- <div class="footer-logo">🛡 PHISHGUARD</div> -->
+  <p class="footer-text">// CYBER SAFETY AWARENESS PLATFORM &nbsp;|&nbsp; ACADEMIC PROJECT</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/quiz.js"></script>
+<script>
+  // Patch showResult to also update display elements
+  const _origShow = window.showResult;
+  const origNextQuestion = window.nextQuestion;
+  window.nextQuestion = function() {
+    origNextQuestion();
+    // If result screen visible, update secondary stats
+    const rs = document.getElementById('quiz-result');
+    if (rs && rs.style.display === 'block') {
+      const s = parseInt(document.getElementById('r-score').textContent);
+      const t = parseInt(document.getElementById('r-total').textContent);
+      document.getElementById('r-score-disp').textContent = s;
+      document.getElementById('r-wrong-disp').textContent = t - s;
+      document.getElementById('r-pct-disp').textContent = document.getElementById('r-pct').textContent;
+    }
+  };
+  // After showResult fires, update secondary stat elements
+  const observer2 = new MutationObserver(() => {
+    const rs = document.getElementById('quiz-result');
+    if (rs && rs.style.display === 'block') {
+      const s = parseInt(document.getElementById('r-score').textContent)||0;
+      const t = parseInt(document.getElementById('r-total').textContent)||8;
+      document.getElementById('r-score-disp').textContent = s;
+      document.getElementById('r-wrong-disp').textContent = t - s;
+      document.getElementById('r-pct-disp').textContent = document.getElementById('r-pct').textContent;
+    }
+  });
+  observer2.observe(document.getElementById('quiz-result'), { attributes: true, attributeFilter: ['style'] });
+</script>
+</body>
+</html>

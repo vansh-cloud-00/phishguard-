@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – PhishGuard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .dashboard-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; margin-bottom: 2rem; }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover { border-color: var(--border-glow); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06), transparent 70%);
+      pointer-events: none;
+    }
+
+    .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .stat-val { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--accent-cyan); text-shadow: 0 0 20px rgba(0,212,255,0.3); }
+    .stat-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); letter-spacing: 2px; margin-top: 0.3rem; }
+
+    .awareness-section { margin-bottom: 2rem; }
+    .awareness-card { padding: 2rem; }
+    .awareness-title { font-family: var(--font-display); font-size: 1rem; color: var(--accent-cyan); letter-spacing: 1px; margin-bottom: 0.5rem; }
+    .awareness-pct { font-family: var(--font-display); font-size: 3rem; font-weight: 700; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .awareness-status { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; }
+    .awareness-bar-wrap { margin-top: 1.2rem; }
+
+    /* Chart */
+    .chart-bar-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.9rem; }
+    .chart-bar-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); width: 100px; flex-shrink:0; }
+    .chart-bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+    .chart-bar-fill { height: 100%; border-radius: 4px; width: 0; }
+    .chart-bar-val { font-family: var(--font-display); font-size: 0.82rem; width: 40px; text-align:right; flex-shrink:0; }
+
+    /* Badges */
+    .badge-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+
+    .badge-item {
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .badge-item.earned {
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.2);
+    }
+
+    .badge-item.locked {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      filter: grayscale(0.8);
+      opacity: 0.5;
+    }
+
+    .badge-item.earned:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,212,255,0.1); }
+
+    .badge-icon { font-size: 2.2rem; margin-bottom: 0.4rem; }
+    .badge-name { font-family: var(--font-display); font-size: 0.75rem; color: var(--text-primary); letter-spacing: 1px; margin-bottom: 0.3rem; }
+    .badge-status { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); }
+    .badge-item.earned .badge-status { color: var(--accent-green); }
+
+    /* Recent activity */
+    .activity-item { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--border-subtle); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
+    .activity-text { flex: 1; font-size: 0.88rem; color: var(--text-secondary); }
+    .activity-val { font-family: var(--font-mono); font-size: 0.82rem; }
+
+    @media(max-width:900px) { .dashboard-grid { grid-template-columns: repeat(2,1fr); } .badge-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:600px) { .dashboard-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="logo-icon">🛡</div><span>PHISHGUARD</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="learn.html">📚 Learn</a></li>
+    <li><a href="quiz.html">🎮 Quiz</a></li>
+    <li><a href="threat.html">🌐 Threat Intel</a></li>
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <!-- <li><a href="detector.html" class="nav-detector">🔍 URL Detector</a></li> -->
+    <li><a href="about.html">ℹ️ About</a></li>
+  </ul>
+  <!-- <div class="nav-status"><span class="status-dot"></span><span class="live-clock"></span></div> -->
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <div class="page-badge">📊 PERSONAL DASHBOARD</div>
+    <h1 class="page-title">Your Training Progress</h1>
+    <p class="page-subtitle">Track your quiz scores, threat checks, and overall cyber awareness level. All data is stored locally in your browser.</p>
+  </div>
+
+  <div class="container" style="padding-bottom:4rem;">
+
+    <!-- STAT CARDS -->
+    <div class="dashboard-grid fade-in">
+      <div class="stat-card">
+        <div class="stat-icon">🎮</div>
+        <div class="stat-val" id="stat-quizzes">0</div>
+        <div class="stat-label">QUIZZES TAKEN</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-val" id="stat-score">0%</div>
+        <div class="stat-label">BEST QUIZ SCORE</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌐</div>
+        <div class="stat-val" id="stat-threats">0</div>
+        <div class="stat-label">THREAT CHECKS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-val" id="stat-learns">0</div>
+        <div class="stat-label">LEARN VISITS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌍</div>
+        <div class="stat-val" id="stat-visits">0</div>
+        <div class="stat-label">PAGE VISITS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🛡</div>
+        <div class="stat-val" id="stat-awareness">0%</div>
+        <div class="stat-label">AWARENESS SCORE</div>
+      </div>
+    </div>
+
+    <!-- AWARENESS + ACTIVITY ROW -->
+    <div class="grid-2 fade-in" style="margin-bottom:2rem;">
+
+      <div class="card awareness-section awareness-card">
+        <div class="awareness-title">OVERALL CYBER AWARENESS</div>
+        <div class="awareness-pct" id="stat-awareness-big">—</div>
+        <p class="awareness-status" id="awareness-status">Loading your data...</p>
+        <div class="awareness-bar-wrap">
+          <div class="progress-bar" style="height:10px;">
+            <div class="progress-fill" id="awareness-bar" style="width:0%;transition:width 1.2s ease 0.5s;"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border-subtle);">
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--accent-cyan);"></div>
+            <span class="activity-text">Last Quiz Score</span>
+            <span class="activity-val" id="last-quiz-score" style="color:var(--accent-cyan);">—</span>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--accent-green);"></div>
+            <span class="activity-text">Last Quiz Date</span>
+            <span class="activity-val text-green" id="last-quiz-date">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom:1.5rem;">📈 ACTIVITY OVERVIEW</h3>
+        <div id="activity-chart">
+          <p style="color:var(--text-muted);font-size:0.85rem;font-family:var(--font-mono);">Loading activity data...</p>
+        </div>
+
+        <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border-subtle);">
+          <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);letter-spacing:1px;margin-bottom:0.75rem;">HOW TO IMPROVE YOUR SCORE</div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--accent-cyan);"></div>
+            <span class="activity-text">Take a quiz → +30 points</span>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--accent-green);"></div>
+            <span class="activity-text">Score ≥75% → +30 points</span>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--accent-orange);"></div>
+            <span class="activity-text">Visit Learn section → +20 points</span>
+          </div>
+          <div class="activity-item" style="border-bottom:none;">
+            <div class="activity-dot" style="background:var(--accent-purple);"></div>
+            <span class="activity-text">Check threat intel → +10 points</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="card fade-in" style="margin-bottom:2rem;">
+      <h3 class="card-title" style="margin-bottom:1.5rem;">🏅 ACHIEVEMENT BADGES</h3>
+      <div class="badge-grid" id="badge-grid">
+        <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.82rem;">Loading badges...</p>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="card fade-in" style="text-align:center;padding:2.5rem;">
+      <h3 class="card-title" style="margin-bottom:0.5rem;">LEVEL UP YOUR AWARENESS</h3>
+      <p class="card-text" style="margin-bottom:1.5rem;">Complete more activities to earn all badges and reach 100% awareness.</p>
+      <div class="flex-center gap-2 flex-wrap">
+        <a href="quiz.html" class="btn btn-primary">🎮 Take Quiz</a>
+        <a href="learn.html" class="btn btn-outline">📚 Study More</a>
+        <a href="threat.html" class="btn btn-outline">🌐 Check Threats</a>
+        <button class="btn btn-danger" onclick="clearData()">🗑 Reset Data</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <!-- <div class="footer-logo">🛡 PHISHGUARD</div> -->
+  <p class="footer-text">// CYBER SAFETY AWARENESS PLATFORM &nbsp;|&nbsp; ACADEMIC PROJECT</p>
+</footer>
+<script src="js/firebase-config.js"></script>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+  // Mirror awareness % to big display
+  const bigEl = document.getElementById('stat-awareness-big');
+  const obs = new MutationObserver(() => {
+    const v = document.getElementById('stat-awareness').textContent;
+    if (bigEl) bigEl.textContent = v;
+  });
+  obs.observe(document.getElementById('stat-awareness'), { childList: true, characterData: true, subtree: true });
+
+  function clearData() {
+    if (confirm('Reset all your PhishGuard progress data? This cannot be undone.')) {
+      Object.keys(localStorage).filter(k => k.startsWith('phishguard_')).forEach(k => localStorage.removeItem(k));
+      location.reload();
+    }
+  }
+</script>
+</body>
+</html>
